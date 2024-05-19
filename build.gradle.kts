@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "de.flauschig.eucalyptus"
-version = "1.0-SNAPSHOT"
+version = System.getenv("VERSION")?: "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -13,25 +13,6 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 }
-/*
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/FlauschigDings/eucalyptus")
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getProperty("USERNAME")
-                password = project.findProperty("gpr.password") as String? ?: System.getProperty("PASSWORD")
-            }
-        }
-    }
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-        }
-    }
-}
- */
 publishing {
     repositories {
         maven {
@@ -45,6 +26,7 @@ publishing {
     }
     publications {
         register<MavenPublication>("gpr") {
+            artifactId = "core"
             from(components["java"])
         }
     }
