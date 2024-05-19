@@ -13,9 +13,30 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 }
-
+/*
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/FlauschigDings/eucalyptus")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getProperty("USERNAME")
+                password = project.findProperty("gpr.password") as String? ?: System.getProperty("PASSWORD")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+}
+ */
 publishing {
     publications {
+        create<MavenPublication>("gpr") {
+            from(components["java"])
+        }
         create<MavenPublication>("mavenJava") {
             from(components["java"])
         }
@@ -23,7 +44,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://github.com/FlauschigDings/eucalyptus")
+            url = uri("https://maven.pkg.github.com/FlauschigDings/eucalyptus")
             credentials {
                 username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
                 password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
