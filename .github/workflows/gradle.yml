@@ -20,7 +20,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: build
-        run: ./gradlew jar
+        run: chmod +x gradlew && ./gradlew jar
       - uses: actions/upload-artifact@v3
         with:
           name: Artifacts
@@ -28,6 +28,6 @@ jobs:
           # Delete artifacts after 1 week
           retention-days: 7
       - name: Publish to GitHub Packages
-        run: chmod +x gradlew && ./gradlew publsh
+        run: ./gradlew publsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
