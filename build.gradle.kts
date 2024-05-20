@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "de.flauschig.eucalyptus"
-version = "1.0-SNAPSHOT"
+version = System.getenv("VERSION")?: "1.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
