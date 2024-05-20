@@ -82,11 +82,11 @@ open class Registry(
      * Calls the event handler methods associated with the specified event.
      *
      * @param event the event for which event handlers should be called.
-     * @param pairs the event hooks associated with the specified event.
+     * @param events the event hooks associated with the specified event.
      *
      * This function iterates over the event hooks associated with the specified event and calls
      * the event handler methods for each hook.
      */
     @Throws
-    private fun callEvent(event: Event, pairs: MutableList<EventHook<*>>) = pairs.forEach { it.callEvent(event) }
+    private inline fun callEvent(event: Event, events: MutableList<EventHook<*>>) = events.forEach { it.callEvent(event) }
 }

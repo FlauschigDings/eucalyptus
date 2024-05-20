@@ -33,13 +33,15 @@ import java.lang.reflect.Method
  *
  * @property listener the event listener associated with the hook.
  * @property method the method in the event listener responsible for handling events.
+ * @property priority the priority of the event hook. Higher priorities are executed before lower priorities.
  *
  * This class encapsulates an event listener along with the method within it that handles events. When an event
  * occurs, the `callEvent` method can be invoked to trigger the event handling process.
  */
 data class EventHook<T : EventListener>(
     val listener: T,
-    val method: Method
+    val method: Method,
+    val priority: Int,
 ) {
     /**
      * Calls the method associated with this hook to handle the specified event.
@@ -52,5 +54,5 @@ data class EventHook<T : EventListener>(
      * Any exceptions thrown during the method invocation are propagated.
      */
     @Throws(IllegalAccessException::class, InvocationTargetException::class)
-    fun callEvent(event: Event) = method.invoke(this.listener, event)
+    fun callEvent(event: Event) = method.invoke(listener, event)
 }

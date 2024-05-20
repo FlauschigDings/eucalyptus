@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 FlauschigDings, FooFieOwO, NekosAreKawaii and contributors
+ * Copyright (C) 2024 FlauschigDings, NekosAreKawaii, FooFieOwO and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,31 +18,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
-package de.flauschig.eucalyptus.handler
+package de.flauschig.eucalyptus
 
-import de.flauschig.eucalyptus.Priority
-
-/**
- * Marks a method as an event handler.
- *
- * This annotation is used to mark methods within event listener classes that are intended to handle specific events.
- * Methods annotated with `@EventHandler` are typically called when events of corresponding types occur.
- *
- * @param priority The priority of the event handler. Higher priorities are executed before lower priorities.
- *
- * Usage example:
- * ```
- * class MyListener implements EventListener {
- *     @EventHandler(priority = Priority.HIGH)
- *     fun onMyEvent(event: MyEvent) {
- *         // Handle the event
- *     }
- * }
- * ```
- */
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FUNCTION)
-annotation class EventHandler(val priority: Int = Priority.NORMAL)
+object Priority {
+    const val FALLBACK: Int = Int.MIN_VALUE
+    const val LOWEST:   Int = -2
+    const val LOW:      Int = -1
+    const val NORMAL:   Int = 0
+    const val HIGH:     Int = 1
+    const val HIGHEST:  Int = 2
+    const val MONITOR:  Int = Int.MAX_VALUE
+}
