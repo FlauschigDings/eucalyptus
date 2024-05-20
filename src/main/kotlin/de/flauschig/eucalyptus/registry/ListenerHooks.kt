@@ -48,7 +48,7 @@ class ListenerHooks(
      * in the event listener class. It is intended to be used internally for event handling.
      */
     @Throws
-    private fun <T : EventListener> eventsMethod(listener: T): Map<Int, Method> =
+    private fun <T : EventListener> eventsMethod(listener: T): Map<Int, Pair<Method, Int>> =
         EventInvoker.getEventMethods(listener.javaClass, *events)
 
     /**
@@ -72,7 +72,7 @@ class ListenerHooks(
      * This function returns the list of event hooks associated with the specified event type. If no hooks are found,
      * it returns null. Event hooks are stored internally in a map where the key is the hash code of the event class.
      */
-    fun hook(event: Event): MutableList<EventHook<*>> =
+    inline fun hook(event: Event): MutableList<EventHook<*>> =
         this.hook(event.id)
 
     /**
@@ -90,7 +90,11 @@ class ListenerHooks(
         }
         val listenerMethods = this.eventsMethod(listener)
         listenerMethods.forEach { (eventType, method) ->
-            hooks[eventType].add(EventHook(listener, method))
+            val eventHook = EventHook(listener, method.first, method.second)
+            val hooksList = hooks[eventType]
+            val insertIndex = hooksList.binarySearch { it.priority.compareTo(eventHook.priority) }
+            val actualIndex = if (insertIndex < 0) -insertIndex - 1 else insertIndex
+            hooksList.add(actualIndex, eventHook)
         }
     }
 
@@ -109,6 +113,5 @@ class ListenerHooks(
         hooks.forEach { list ->
             list.removeIf { it.listener == listener }
         }
-        // hooks[.entries.removeIf { it.value.isEmpty() }
     }
 }

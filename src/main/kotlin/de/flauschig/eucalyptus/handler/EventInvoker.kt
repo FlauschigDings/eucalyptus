@@ -37,7 +37,7 @@ object EventInvoker {
     ): MutableMap<Int, MutableList<EventHook<EventListener>>> =
         listeners.flatMap { listener ->
             this.getEventMethods(listener.javaClass, *events)
-                .map { (eventType, method) -> eventType to EventHook(listener, method) }
+                .map { (eventType, method) -> eventType to EventHook(listener, method.first, method.second) }
         }
             .groupBy({ it.first }, { it.second })
             .mapValues { it.value.toMutableList() }
@@ -72,16 +72,16 @@ object EventInvoker {
      * @throws IllegalArgumentException if the listener class or event classes are not valid.
      */
     @Throws
-    fun getEventMethods(listenerClass: Class<*>, vararg event: Class<out Event>): Map<Int, Method> {
+    fun getEventMethods(listenerClass: Class<*>, vararg event: Class<out Event>): Map<Int, Pair<Method, Int>> {
         val methods = listenerClass.declaredMethods
-        val eventMethods = mutableMapOf<Int, Method>()
+        val eventMethods = mutableMapOf<Int, Pair<Method, Int>>()
 
         methods.forEach { method ->
             val methodAnnotation = method.getAnnotation(EventHandler::class.java)
             if (methodAnnotation != null && method.parameterCount == 1) {
                 val parameterType = method.parameterTypes[0]
                 if (event.any { it == parameterType }) {
-                    eventMethods[Indexer.register(parameterType.asSubclass(Event::class.java))] = method
+                    eventMethods[Indexer.register(parameterType.asSubclass(Event::class.java))] = Pair(method, methodAnnotation.priority)
                 }
             }
         }
