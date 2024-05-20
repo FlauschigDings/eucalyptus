@@ -12,6 +12,8 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("reflect"))
+    runtimeOnly(kotlin("reflect"))
     testImplementation(kotlin("test"))
 }
 publishing {

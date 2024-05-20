@@ -12,6 +12,7 @@ public class PacketEvent extends Event {
         super(args);
         this.name = name;
         this.packetState = packetState;
+        System.out.println("init packetmanager");
     }
 
     public String getName() {

@@ -27,6 +27,9 @@ import de.flauschig.eucalyptus.Event
 import de.flauschig.eucalyptus.handler.EventInvoker
 import de.flauschig.eucalyptus.handler.EventListener
 import java.lang.reflect.Method
+import kotlin.jvm.internal.Reflection
+import kotlin.reflect.KCallable
+import kotlin.reflect.KClass
 
 class ListenerHooks(
     val events: Array<Class<out Event>>,
@@ -48,8 +51,8 @@ class ListenerHooks(
      * in the event listener class. It is intended to be used internally for event handling.
      */
     @Throws
-    private fun <T : EventListener> eventsMethod(listener: T): Map<Int, Pair<Method, Int>> =
-        EventInvoker.getEventMethods(listener.javaClass, *events)
+    private fun <T : EventListener> eventsMethod(listener: T): Map<Int, Pair<KCallable<*>, Int>> =
+        EventInvoker.getEventMethodsKotlin(listener::class, *events)
 
     /**
      * Retrieves the list of event hooks associated with a specific event type.

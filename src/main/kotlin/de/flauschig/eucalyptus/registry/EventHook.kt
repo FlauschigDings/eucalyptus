@@ -27,6 +27,7 @@ import de.flauschig.eucalyptus.Event
 import de.flauschig.eucalyptus.handler.EventListener
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import kotlin.reflect.KCallable
 
 /**
  * Represents a hook that associates an event listener with a method to handle events.
@@ -40,7 +41,7 @@ import java.lang.reflect.Method
  */
 data class EventHook<T : EventListener>(
     val listener: T,
-    val method: Method,
+    val method: KCallable<*>,
     val priority: Int,
 ) {
     /**
@@ -54,5 +55,8 @@ data class EventHook<T : EventListener>(
      * Any exceptions thrown during the method invocation are propagated.
      */
     @Throws(IllegalAccessException::class, InvocationTargetException::class)
-    fun callEvent(event: Event) = method.invoke(listener, event)
+    fun callEvent(event: Event) = method.callBy(mapOf(
+            method.parameters[0] to listener,
+            method.parameters[1] to event,
+    ))
 }

@@ -27,9 +27,15 @@ import de.flauschig.eucalyptus.Event
 import de.flauschig.eucalyptus.registry.EventHook
 import de.flauschig.eucalyptus.registry.Indexer
 import java.lang.reflect.Method
+import kotlin.jvm.internal.Reflection
+import kotlin.reflect.KCallable
+import kotlin.reflect.KClass
+import kotlin.reflect.javaType
+import kotlin.system.measureTimeMillis
 
 object EventInvoker {
 
+    /*
     @Deprecated("use a empty map for init")
     fun listenerCaller(
         listeners: MutableSet<EventListener>,
@@ -42,6 +48,58 @@ object EventInvoker {
             .groupBy({ it.first }, { it.second })
             .mapValues { it.value.toMutableList() }
             .toMutableMap()
+     */
+
+    /**
+     * Retrieves a mapping of event types to corresponding methods in a listener class that are annotated
+     * with `@EventHandler` and accept the event type as a parameter.
+     *
+     * @param listenerClass the class of the listener containing event handler methods.
+     * @param event the event classes to filter the methods for.
+     * @return a map where the key is the hash code of the event class and the value is the corresponding method
+     *         in the listener class.
+     *
+     * This function scans the provided listener class for methods that are annotated with `@EventHandler`
+     * and have a single parameter matching one of the specified event classes. It then returns a map
+     * where each event class's hash code is mapped to its corresponding method.
+     *
+     * Usage example:
+     * ```
+     * class MyListener implements EventListener {
+     *     @EventHandler
+     *     fun onMyEvent(event: MyEvent) {
+     *         // Handle the event
+     *     }
+     * }
+     *
+     * val eventMethods = getEventMethods(MyListener::class.java, MyEvent::class.java)
+     * val myEventMethod = eventMethods[MyEvent::class.java.hashCode()]
+     * ```
+     *
+     * @throws IllegalArgumentException if the listener class or event classes are not valid.
+     */
+    @OptIn(ExperimentalStdlibApi::class)
+    @Throws
+    fun getEventMethodsKotlin(listenerClass: KClass<*>, vararg event: Class<out Event>): Map<Int, Pair<KCallable<*>, Int>> {
+        val methods = listenerClass.members
+        val eventMethods= mutableMapOf<Int, Pair<KCallable<*>, Int>>()
+
+        methods.forEach { method ->
+            val methodAnnotation = method.annotations.find { it is EventHandler } as EventHandler?
+            if (methodAnnotation != null && method.parameters.size == 2) {
+                println(method.parameters[1].type.javaType)
+                println(event[0])
+                val parameterType = method.parameters[1].type
+                event.forEach {
+                    if (it == parameterType.javaType) {
+                        eventMethods[Indexer.register(it)] = Pair(method, methodAnnotation.priority)
+                    }
+                }
+            }
+        }
+
+        return eventMethods
+    }
 
     /**
      * Retrieves a mapping of event types to corresponding methods in a listener class that are annotated
@@ -72,11 +130,11 @@ object EventInvoker {
      * @throws IllegalArgumentException if the listener class or event classes are not valid.
      */
     @Throws
-    fun getEventMethods(listenerClass: Class<*>, vararg event: Class<out Event>): Map<Int, Pair<Method, Int>> {
-        val methods = listenerClass.declaredMethods
-        val eventMethods = mutableMapOf<Int, Pair<Method, Int>>()
+    fun getEventMethods(listenerClass: KClass<*>, vararg event: Class<out Event>): Map<Int, Pair<Method, Int>> {
+        val methods = listenerClass.java.declaredMethods
+        val eventMethods= mutableMapOf<Int, Pair<Method, Int>>()
 
-        methods.forEach { method ->
+        listenerClass.java.declaredMethods.forEach { method ->
             val methodAnnotation = method.getAnnotation(EventHandler::class.java)
             if (methodAnnotation != null && method.parameterCount == 1) {
                 val parameterType = method.parameterTypes[0]
@@ -85,7 +143,6 @@ object EventInvoker {
                 }
             }
         }
-
         return eventMethods
     }
 }
