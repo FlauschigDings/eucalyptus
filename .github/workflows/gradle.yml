@@ -2,7 +2,9 @@ name: "Build"
 on: [push, workflow_dispatch]
 
 jobs:
-  build:
+  publish:
+    if: github.event_name != 'pull_request'  # Add this line to prevent execution on pull requests
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +36,6 @@ jobs:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test:
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - uses: actions/checkout@v4
       - uses: gradle/wrapper-validation-action@v1
