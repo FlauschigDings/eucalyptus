@@ -20,7 +20,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: build
-        run: ./gradlew jar
+        run: chmod +x ./gradlew && ./gradlew jar
       - uses: actions/upload-artifact@v3
         with:
           name: Artifacts
@@ -30,4 +30,5 @@ jobs:
       - name: Publish to GitHub Packages
         run: ./gradlew publsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ secrets.GITHUB_ACTOR }}
