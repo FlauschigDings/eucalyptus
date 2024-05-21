@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 FlauschigDings, FooFieOwO, NekosAreKawaii and contributors
+ * Copyright (C) 2024 FlauschigDings, NekosAreKawaii, FooFieOwO and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,11 @@
 package de.flauschig.eucalyptus.handler
 
 import de.flauschig.eucalyptus.Event
-import de.flauschig.eucalyptus.registry.EventHook
 import de.flauschig.eucalyptus.registry.Indexer
 import java.lang.reflect.Method
-import kotlin.jvm.internal.Reflection
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.javaType
-import kotlin.system.measureTimeMillis
 
 object EventInvoker {
 
