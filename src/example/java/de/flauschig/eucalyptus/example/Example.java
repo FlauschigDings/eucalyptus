@@ -12,7 +12,7 @@ public class Example {
                 ExampleEvent.class,
                 PacketEvent.Receive.class,
                 PacketEvent.Send.class,
-                CustomPayloadEvent.class,
+                CustomPayloadEvent.class
         });
 
         final ExampleListener listener = new ExampleListener();
