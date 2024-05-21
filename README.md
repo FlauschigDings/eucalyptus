@@ -47,16 +47,20 @@ class ExampleListener : EventListener {
 ```
 #### Event Register, Dispatch and Subscribe / Unsubscribe
 ```kotlin
-fun example() {
-    val registry = Registry(arrayOf(
-        ExampleEvent::class.java
-    ))
+class Example {
+    fun example() {
+        val registry = Registry(
+            arrayOf(
+                ExampleEvent::class.java
+            )
+        )
 
-    val listener = ExampleListener()
+        val listener = ExampleListener()
 
-    registry.subscribe(listener)
-    registry.addEvent(ExampleEvent("Rainbowdash"))
-    registry.unsubscribe(listener)
+        registry.subscribe(listener)
+        registry.addEvent(ExampleEvent("Rainbowdash"))
+        registry.unsubscribe(listener)
+    }
 }
 ```
 ### Java
@@ -87,7 +91,7 @@ public class ExampleListener implements EventListener {
 ```java
 public class Example {
     public static void example() {
-        Registry registry = new Registry(new Class<?>[]{
+        Registry registry = new Registry(new Class[]{
             ExampleEvent.class
         });
 

@@ -3,16 +3,14 @@ package de.flauschig.eucalyptus.example.events;
 import de.flauschig.eucalyptus.Event;
 
 public class PacketEvent extends Event {
-
-    final private String name;
-    final private PacketState packetState;
+    private final String name;
+    private final PacketState packetState;
 
     @SafeVarargs
     public PacketEvent(final String name, PacketState packetState, Class<? extends Event>... args) {
         super(args);
         this.name = name;
         this.packetState = packetState;
-        System.out.println("init packetmanager");
     }
 
     public String getName() {
@@ -39,5 +37,4 @@ public class PacketEvent extends Event {
         SEND,
         RECEIVE;
     }
-
 }

@@ -5,7 +5,6 @@ import de.flauschig.eucalyptus.handler.EventHandler;
 import de.flauschig.eucalyptus.handler.EventListener;
 
 public class Handler implements EventListener {
-
     @EventHandler
     public void customPayload(final CustomPayloadEvent payloadEvent) {
         System.out.println("-- Called by customPayload --");

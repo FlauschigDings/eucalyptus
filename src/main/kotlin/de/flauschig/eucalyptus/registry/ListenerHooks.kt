@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 FlauschigDings, FooFieOwO, NekosAreKawaii and contributors
+ * Copyright (C) 2024 FlauschigDings, NekosAreKawaii, FooFieOwO and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,7 @@ package de.flauschig.eucalyptus.registry
 import de.flauschig.eucalyptus.Event
 import de.flauschig.eucalyptus.handler.EventInvoker
 import de.flauschig.eucalyptus.handler.EventListener
-import java.lang.reflect.Method
-import kotlin.jvm.internal.Reflection
 import kotlin.reflect.KCallable
-import kotlin.reflect.KClass
 
 class ListenerHooks(
     val events: Array<Class<out Event>>,

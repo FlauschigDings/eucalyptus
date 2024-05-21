@@ -6,7 +6,6 @@ import de.flauschig.eucalyptus.handler.EventHandler;
 import de.flauschig.eucalyptus.handler.EventListener;
 
 public class GroupHandler implements EventListener {
-
     @EventHandler
     public void sendPacket(PacketEvent.Send send) {
         System.out.println("-- Called by sendPacket --");
